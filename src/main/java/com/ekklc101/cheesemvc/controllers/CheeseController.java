@@ -37,10 +37,44 @@ public class CheeseController {
 
     @RequestMapping(value = "add", method = RequestMethod.POST)
     public String processAddCheeseForm(@RequestParam String name, @RequestParam String desc) {
-        Cheese c = new Cheese();
-        c.setDesc(desc);
-        c.setName(name);
-        cheeses.add(c);
+        if (validInput(name)) {
+            Cheese c = new Cheese();
+            c.setDesc(desc);
+            c.setName(name);
+            cheeses.add(c);
+            return "redirect:";
+        } else {
+            return "redirect:/cheese/invalid";
+        }
+    }
+
+    @RequestMapping(value = "remove", method = RequestMethod.GET)
+    public String displayRemoveCheeseForm(Model model) {
+        String title = "Remove Cheese";
+        model.addAttribute("title", title);
+        model.addAttribute("cheeses", cheeses);
+        return "cheese/remove";
+    }
+
+    @RequestMapping(value = "remove", method = RequestMethod.POST)
+    public String processRemoveCheeseForm(@RequestParam String cheeseName) {
+        cheeses.removeIf(c -> c.getName().equals(cheeseName));
         return "redirect:";
+    }
+
+    @RequestMapping(value="invalid")
+    public String onError(Model model) {
+        String title = "Invalid Input";
+        model.addAttribute("title", title);
+        return "cheese/invalid";
+    }
+
+    private boolean validInput(String input) {
+        for (int c : input.toCharArray()) {
+            if (c > 122 || c < 32 || (c < 65 && c > 32) || (c < 97 && c > 90)) {//space=32,uppercase=65-90,lowercase=97-122
+                return false;
+            }
+        }
+        return true;
     }
 }
