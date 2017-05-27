@@ -2,15 +2,16 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org/">
 <head th:replace="fragments :: head">
 </head>
-<body>
+<body class="container">
     <h1 th:replace="fragments :: title"></h1>
 
     <nav th:replace="fragments :: navigation"></nav>
 
     <form method="post">
-        <select name="cheeseName">
-            <option th:each="cheese : ${cheeses}" th:text="${cheese.getName()}"></option>
-        </select>
+        <div th:each="cheese : ${cheeses}" class="checkbox">
+            <input type="checkbox" name="cheeseIds" th:value="${cheese.getId()}" th:id="${cheese.getId()}" />
+            <label th:for="${cheese.getId()}" th:text="${cheese.getName()} + ' - ' + ${cheese.getDesc()}"></label>
+        </div>
         <input type="submit" value="Remove Cheese"/>
     </form>
 </body>
