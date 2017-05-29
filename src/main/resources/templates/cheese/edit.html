@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head">
+</head>
+<body class="container">
+    <h1 th:replace="fragments :: title" th:text="${editcheese.getName()} (ID=${editcheese.getId()})"> </h1>
+
+    <nav th:replace="fragments :: navigation"></nav>
+
+    <form method="post">
+
+            <input th:value="${editcheese.getName()}" type="text" name="name"/>
+            <input th:value="${editcheese.getDesc()}" type="text" name="desc"/>
+            <input th:value="${editcheese.getId()}" type="hidden" name="id"/>
+            <input type="submit" value="Edit Cheese"/>
+
+    </form>
+</body>
+</html>

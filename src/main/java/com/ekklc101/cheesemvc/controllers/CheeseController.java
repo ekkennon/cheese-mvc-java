@@ -4,14 +4,7 @@ import com.ekklc101.cheesemvc.models.Cheese;
 import com.ekklc101.cheesemvc.models.CheeseData;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by raefo on 15-May-17.
@@ -39,13 +32,8 @@ public class CheeseController {
 
     @RequestMapping(value = "add", method = RequestMethod.POST)
     public String processAddCheeseForm(@ModelAttribute Cheese c) {
-        //if (CheeseData.isValidInput(name)) {
-            //Cheese c = new Cheese(name, desc);
             CheeseData.add(c);
             return "redirect:";
-        //} else {
-            //return "redirect:/cheese/invalid";
-        //}
     }
 
     @RequestMapping(value = "remove", method = RequestMethod.GET)
@@ -61,14 +49,20 @@ public class CheeseController {
         for (int cheeseId : cheeseIds) {
             CheeseData.remove(cheeseId);
         }
-        //cheeses.removeIf(c -> c.getName().equals(cheeseName));
         return "redirect:";
     }
 
-    @RequestMapping(value="invalid")
-    public String onError(Model model) {
-        String title = "Invalid Input";
+    @RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
+    public String displayEditCheeseForm(Model model, @PathVariable int id) {
+        String title = "Edit Cheese";
+        model.addAttribute("editcheese", CheeseData.getById(id));
         model.addAttribute("title", title);
-        return "cheese/invalid";
+        return "cheese/edit";
+    }
+
+    @RequestMapping(value = "edit/**", method = RequestMethod.POST)
+    public String processEditCheeseForm(@ModelAttribute Cheese c) {
+        CheeseData.edit(c);
+        return "redirect:http://localhost:8080/cheese";
     }
 }

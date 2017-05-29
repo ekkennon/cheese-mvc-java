@@ -18,7 +18,14 @@ public class CheeseData {
     }
 
     public static void remove(int c) {
+        //cheeses.removeIf(c -> c.getName().equals(cheeseName));
         cheeses.remove(getById(c));
+    }
+
+    public static void edit(Cheese c) {
+        Cheese editCheese = cheeses.get(c.getId());
+        editCheese.setName(c.getName());
+        editCheese.setDesc(c.getDesc());
     }
 
     public static Cheese getById(int id) {
