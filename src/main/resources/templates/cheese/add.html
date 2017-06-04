@@ -7,10 +7,15 @@
 
     <nav th:replace="fragments :: navigation"></nav>
 
-    <form method="post" style="max-width:600px">
+    <form method="post" style="max-width:600px" th:object="${cheese}">
         <div class="form-group">
-            <input placeholder="Name" class="form-control" type="text" name="name"/>
-            <input placeholder="Desc" class="form-control" type="text" name="desc"/>
+            <input placeholder="Name" class="form-control" type="text" name="name" th:field="*{name}"/>
+            <span th:errors="*{name}" class="error"></span>
+            <input placeholder="Description" class="form-control" type="text" name="desc" th:field="*{desc}"/>
+            <span th:errors="*{desc}" class="error"></span>
+            <select th:field="*{type}">
+                <option th:each="cheeseType : ${cheeseTypes}" th:text="${cheeseType.name}" th:value="${cheeseType}"></option>
+            </select>
             <input type="submit" value="Add Cheese"/>
         </div>
     </form>

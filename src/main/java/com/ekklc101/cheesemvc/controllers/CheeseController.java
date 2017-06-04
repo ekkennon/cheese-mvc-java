@@ -2,9 +2,13 @@ package com.ekklc101.cheesemvc.controllers;
 
 import com.ekklc101.cheesemvc.models.Cheese;
 import com.ekklc101.cheesemvc.models.CheeseData;
+import com.ekklc101.cheesemvc.models.CheeseType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 /**
  * Created by raefo on 15-May-17.
@@ -27,13 +31,18 @@ public class CheeseController {
     public String displayAddCheeseForm(Model model) {
         String title = "Add Cheese";
         model.addAttribute("title", title);
+        model.addAttribute(new Cheese());
+        model.addAttribute("cheeseTypes", CheeseType.values());
         return "cheese/add";
     }
 
     @RequestMapping(value = "add", method = RequestMethod.POST)
-    public String processAddCheeseForm(@ModelAttribute Cheese c) {
-            CheeseData.add(c);
-            return "redirect:";
+    public String processAddCheeseForm(@ModelAttribute @Valid Cheese c, Errors errors, Model model) {
+        if (errors.hasErrors()) {
+            return displayAddCheeseForm(model);
+        }
+        CheeseData.add(c);
+        return "redirect:";
     }
 
     @RequestMapping(value = "remove", method = RequestMethod.GET)
@@ -57,12 +66,20 @@ public class CheeseController {
         String title = "Edit Cheese";
         model.addAttribute("editcheese", CheeseData.getById(id));
         model.addAttribute("title", title);
+        model.addAttribute("cheeseTypes", CheeseType.values());
         return "cheese/edit";
     }
 
     @RequestMapping(value = "edit/**", method = RequestMethod.POST)
-    public String processEditCheeseForm(@ModelAttribute Cheese c) {
-        CheeseData.edit(c);
-        return "redirect:http://localhost:8080/cheese";
+    public String processEditCheeseForm(@ModelAttribute @Valid Cheese c, Errors errors, Model model) {
+        if (errors.hasErrors()) {
+            String title = "Edit Cheese";
+            model.addAttribute("editcheese", c);
+            model.addAttribute("title", title);
+            return "cheese/edit/" + Integer.toString(c.getId());
+        } else {
+            CheeseData.edit(c);
+            return "redirect:http://localhost:8080/cheese";
+        }
     }
 }
