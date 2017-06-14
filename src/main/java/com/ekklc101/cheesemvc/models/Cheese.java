@@ -1,14 +1,21 @@
 package com.ekklc101.cheesemvc.models;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
  * Created by raefo on 16-May-17.
  */
+
+@Entity
 public class Cheese {
-    private static int nextId = 0;
+    @Id
+    @GeneratedValue
     private int id;
+
     private CheeseType type;
 
     @NotNull
@@ -17,24 +24,17 @@ public class Cheese {
 
     @NotNull
     @Size(min=1, message="Description must not be empty")
-    private String desc;
+    private String description;
 
     public Cheese(String n, String d) {
-        this();
         name = n;
-        desc = d;
+        description = d;
     }
 
-    public Cheese() {
-        id = nextId++;
-    }
+    public Cheese() {}// for hibernate
 
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -45,12 +45,12 @@ public class Cheese {
         this.name = name;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public CheeseType getType() {
